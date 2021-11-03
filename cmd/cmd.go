@@ -20,12 +20,14 @@ import (
 const name = "pixie"
 
 type config struct {
-	LogLevel        string `validate:"oneof=debug info"`
-	IPXEAddr        string `validate:"required,ip"`
-	IPXEURL         string `validate:"required"`
-	ProxyDHCPAddr   string `validate:"hostname_port"`
-	CustomUserClass string
-	Log             logr.Logger
+	LogLevel         string `validate:"oneof=debug info"`
+	IPXEAddr         string `validate:"required,ip"`
+	IPXEURL          string `validate:"required"`
+	ProxyDHCPAddr    string `validate:"hostname_port"`
+	CustomUserClass  string
+	DisableIPXE      bool
+	DisableProxyDHCP bool
+	Log              logr.Logger
 }
 
 func Execute(ctx context.Context) error {
@@ -58,6 +60,8 @@ func registerFlags(c *config, name string, errHandler flag.ErrorHandling) *flag.
 	fs.StringVar(&c.IPXEURL, "ipxe-url", "", "ipxe url")
 	fs.StringVar(&c.ProxyDHCPAddr, "proxy-dhcp-addr", ":67", "address to listen on for proxy dhcp")
 	fs.StringVar(&c.CustomUserClass, "custom-user-class", "iPXE", "custom user class")
+	fs.BoolVar(&c.DisableIPXE, "disable-ipxe", false, "disable ipxe")
+	fs.BoolVar(&c.DisableProxyDHCP, "disable-proxy-dhcp", false, "disable proxy dhcp")
 
 	return fs
 }
