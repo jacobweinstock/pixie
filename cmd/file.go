@@ -3,7 +3,7 @@ package cmd
 import (
 	"context"
 	"flag"
-	"fmt"
+	"net"
 
 	"github.com/go-playground/validator/v10"
 	ipxe "github.com/jacobweinstock/ipxe/cli"
@@ -35,32 +35,33 @@ func (c *fileCfg) exec(ctx context.Context) error {
 		return err
 	}
 	c.Log = defaultLogger(c.LogLevel)
-	fmt.Printf("file: %+v\n", c.config)
-	c.Log.Info("debugging", "file", fmt.Sprintf("%+v", c))
-	cf := ipxe.FileCfg{
-		Config: ipxe.Config{
-			TFTPAddr: c.TftpAddr,
-			HTTPAddr: c.HttpAddr,
-			LogLevel: c.LogLevel,
-			Log:      c.Log,
-		},
-		Filename: c.Filename,
-	}
+
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(func() error {
+		cf := ipxe.NewFile(
+			ipxe.WithLogger(c.Log),
+			ipxe.WithFilename(c.Filename),
+			ipxe.WithHTTP(c.HttpAddr),
+			ipxe.WithTFTPAddr(c.TftpAddr),
+			ipxe.WithLogLevel(c.LogLevel),
+		)
 		return cf.Exec(ctx, nil)
 	})
 	g.Go(func() error {
-		pd := &proxydhcp.Config{
-			LogLevel:        c.LogLevel,
-			TFTPAddr:        "tftp://" + "192.168.2.225",
-			HTTPAddr:        "http://" + "192.168.2.225",
-			IPXEURL:         c.IPXEURL,
-			Addr:            c.Addr,
-			CustomUserClass: c.CustomUserClass,
-			Log:             c.Log,
+		httpHost, _, _ := net.SplitHostPort(c.HttpAddr)
+		tftpHost, _, _ := net.SplitHostPort(c.TftpAddr)
+		pd := proxydhcp.NewConfig(
+			proxydhcp.WithLogger(c.Log),
+			proxydhcp.WithLogLevel(c.LogLevel),
+			proxydhcp.WithHTTPAddr("http://"+httpHost),
+			proxydhcp.WithTFTPAddr("tftp://"+tftpHost),
+			proxydhcp.WithCustomUserClass(c.CustomUserClass),
+			proxydhcp.WithAddr(c.Addr),
+			proxydhcp.WithIPXEURL(c.IPXEURL),
+		)
+		if err := pd.ValidateConfig(); err != nil {
+			return err
 		}
-		c.Log.Info("debugging", "pd", fmt.Sprintf("%+v", pd))
 		return pd.Run(ctx, nil)
 	})
 	return g.Wait()

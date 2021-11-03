@@ -681,8 +681,12 @@ github.com/influxdata/influxdb1-client v0.0.0-20191209144304-8bf82d3c094d/go.mod
 github.com/j-keck/arping v0.0.0-20160618110441-2cf9dc699c56/go.mod h1:ymszkNOg6tORTn+6F6j+Jc8TOr5osrynvN6ivFWZ2GA=
 github.com/jacobweinstock/ipxe v0.0.0-20211026004313-addd28a30c7e h1:W3djjXeRvxNEWmYPgDROf6c91SEMgvFQgyXO7bzBNRQ=
 github.com/jacobweinstock/ipxe v0.0.0-20211026004313-addd28a30c7e/go.mod h1:NFVZ9sg7NjUUGVGc76kdXgNTArC56hg0QEBD4wYu5lQ=
+github.com/jacobweinstock/ipxe v0.0.0-20211103023812-9e252741cb44 h1:s3DGevnqd2/61q8xoiCDpeJgB4UjWGbv6HybujL+uxs=
+github.com/jacobweinstock/ipxe v0.0.0-20211103023812-9e252741cb44/go.mod h1:NFVZ9sg7NjUUGVGc76kdXgNTArC56hg0QEBD4wYu5lQ=
 github.com/jacobweinstock/proxydhcp v0.3.2-0.20211031212233-1700d91536d4 h1:ACsL870oNhogIocUNyIDTPrc1YKHOGdWJBruXITrkzI=
 github.com/jacobweinstock/proxydhcp v0.3.2-0.20211031212233-1700d91536d4/go.mod h1:rUmx6nsrW9RpFea5ATrmqbzc/ckl/mth7zrk4pGN4LI=
+github.com/jacobweinstock/proxydhcp v0.3.2-0.20211103025423-24ed5c029833 h1:qq7Se6Uqit0b7irLif6NLfolhjt4HwN5jDecU+jEJsk=
+github.com/jacobweinstock/proxydhcp v0.3.2-0.20211103025423-24ed5c029833/go.mod h1:rUmx6nsrW9RpFea5ATrmqbzc/ckl/mth7zrk4pGN4LI=
 github.com/jarcoal/httpmock v1.0.8/go.mod h1:ATjnClrvW/3tijVmpL/va5Z3aAyGvqU3gCT8nX0Txik=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99/go.mod h1:1lJo3i6rXxKeerYnT8Nvf0QmHCRC1n8sfWVwXF2Frvo=
 github.com/jedib0t/go-pretty v4.3.0+incompatible/go.mod h1:XemHduiw8R651AF9Pt4FwCTKeG3oo7hrHJAoznj9nag=

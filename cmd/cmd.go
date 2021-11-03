@@ -59,7 +59,7 @@ func registerFlags(c *config, name string, errHandler flag.ErrorHandling) *flag.
 	fs.StringVar(&c.HttpAddr, "http-addr", "", "http server address")
 	fs.StringVar(&c.IPXEURL, "ipxe-url", "", "ipxe url")
 	fs.StringVar(&c.Addr, "addr", ":8080", "address")
-	fs.StringVar(&c.CustomUserClass, "custom-user-class", "", "custom user class")
+	fs.StringVar(&c.CustomUserClass, "custom-user-class", "iPXE", "custom user class")
 
 	return fs
 }
