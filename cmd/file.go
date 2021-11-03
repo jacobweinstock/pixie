@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"flag"
-	"net"
 
 	"github.com/go-playground/validator/v10"
 	ipxe "github.com/jacobweinstock/ipxe/cli"
@@ -41,22 +40,20 @@ func (c *fileCfg) exec(ctx context.Context) error {
 		cf := ipxe.NewFile(
 			ipxe.WithLogger(c.Log),
 			ipxe.WithFilename(c.Filename),
-			ipxe.WithHTTP(c.HttpAddr),
-			ipxe.WithTFTPAddr(c.TftpAddr),
+			ipxe.WithHTTP(c.IPXEAddr+":80"),
+			ipxe.WithTFTPAddr(c.IPXEAddr+":69"),
 			ipxe.WithLogLevel(c.LogLevel),
 		)
 		return cf.Exec(ctx, nil)
 	})
 	g.Go(func() error {
-		httpHost, _, _ := net.SplitHostPort(c.HttpAddr)
-		tftpHost, _, _ := net.SplitHostPort(c.TftpAddr)
 		pd := proxydhcp.NewConfig(
 			proxydhcp.WithLogger(c.Log),
 			proxydhcp.WithLogLevel(c.LogLevel),
-			proxydhcp.WithHTTPAddr("http://"+httpHost),
-			proxydhcp.WithTFTPAddr("tftp://"+tftpHost),
+			proxydhcp.WithHTTPAddr("http://"+c.IPXEAddr),
+			proxydhcp.WithTFTPAddr("tftp://"+c.IPXEAddr),
 			proxydhcp.WithCustomUserClass(c.CustomUserClass),
-			proxydhcp.WithAddr(c.Addr),
+			proxydhcp.WithAddr(c.ProxyDHCPAddr),
 			proxydhcp.WithIPXEURL(c.IPXEURL),
 		)
 		if err := pd.ValidateConfig(); err != nil {

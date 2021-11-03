@@ -21,10 +21,9 @@ const name = "pixie"
 
 type config struct {
 	LogLevel        string `validate:"oneof=debug info"`
-	TftpAddr        string `validate:"required"`
-	HttpAddr        string `validate:"required"`
+	IPXEAddr        string `validate:"required,ip"`
 	IPXEURL         string `validate:"required"`
-	Addr            string `validate:"hostname_port"`
+	ProxyDHCPAddr   string `validate:"hostname_port"`
 	CustomUserClass string
 	Log             logr.Logger
 }
@@ -55,10 +54,9 @@ func Execute(ctx context.Context) error {
 func registerFlags(c *config, name string, errHandler flag.ErrorHandling) *flag.FlagSet {
 	fs := flag.NewFlagSet(name, errHandler)
 	fs.StringVar(&c.LogLevel, "log-level", "info", "log level")
-	fs.StringVar(&c.TftpAddr, "tftp-addr", "", "tftp server address")
-	fs.StringVar(&c.HttpAddr, "http-addr", "", "http server address")
+	fs.StringVar(&c.IPXEAddr, "ipxe-addr", "", "address for servering tftp (port 69) and http (port 80) ipxe files")
 	fs.StringVar(&c.IPXEURL, "ipxe-url", "", "ipxe url")
-	fs.StringVar(&c.Addr, "addr", ":8080", "address")
+	fs.StringVar(&c.ProxyDHCPAddr, "proxy-dhcp-addr", ":67", "address to listen on for proxy dhcp")
 	fs.StringVar(&c.CustomUserClass, "custom-user-class", "iPXE", "custom user class")
 
 	return fs
