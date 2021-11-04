@@ -62,7 +62,8 @@ func (c *fileCfg) exec(ctx context.Context) error {
 				proxydhcp.WithTFTPAddr("tftp://"+c.IPXEAddr),
 				proxydhcp.WithCustomUserClass(c.CustomUserClass),
 				proxydhcp.WithAddr(c.ProxyDHCPAddr),
-				proxydhcp.WithIPXEURL(c.IPXEURL),
+				proxydhcp.WithIPXEURL(c.IPXEScriptAddr),
+				proxydhcp.WithIPXEScriptName(c.IPXEScript),
 			)
 			if err := pd.ValidateConfig(); err != nil {
 				return err

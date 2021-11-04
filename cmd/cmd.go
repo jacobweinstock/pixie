@@ -22,7 +22,8 @@ const name = "pixie"
 type config struct {
 	LogLevel         string `validate:"oneof=debug info"`
 	IPXEAddr         string `validate:"required,ip"`
-	IPXEURL          string `validate:"required"`
+	IPXEScriptAddr   string `validate:"required"`
+	IPXEScript       string
 	ProxyDHCPAddr    string `validate:"hostname_port"`
 	CustomUserClass  string
 	DisableIPXE      bool
@@ -57,7 +58,8 @@ func registerFlags(c *config, name string, errHandler flag.ErrorHandling) *flag.
 	fs := flag.NewFlagSet(name, errHandler)
 	fs.StringVar(&c.LogLevel, "log-level", "info", "log level")
 	fs.StringVar(&c.IPXEAddr, "ipxe-addr", "", "address for servering tftp (port 69) and http (port 80) ipxe files")
-	fs.StringVar(&c.IPXEURL, "ipxe-url", "", "ipxe url")
+	fs.StringVar(&c.IPXEScriptAddr, "ipxe-script-addr", "", "address that serves the ipxe script (http://192.168.2.2)")
+	fs.StringVar(&c.IPXEScript, "ipxe-script-name", "auto.ipxe", "ipxe script name. used with ipxe-script-addr (http://192.168.2.2/<mac-addr>/auto.ipxe)")
 	fs.StringVar(&c.ProxyDHCPAddr, "proxy-dhcp-addr", ":67", "address to listen on for proxy dhcp")
 	fs.StringVar(&c.CustomUserClass, "custom-user-class", "iPXE", "custom user class")
 	fs.BoolVar(&c.DisableIPXE, "disable-ipxe", false, "disable ipxe")
