@@ -6,8 +6,8 @@ require (
 	github.com/go-logr/logr v1.1.0
 	github.com/go-logr/zapr v1.1.0
 	github.com/go-playground/validator/v10 v10.9.0
-	github.com/jacobweinstock/ipxe v0.0.0-20211103172635-cac2343f1337
-	github.com/jacobweinstock/proxydhcp v0.3.2-0.20211104014734-64e9629a2366
+	github.com/jacobweinstock/ipxe v0.0.0-20211104164223-dfa862285dab
+	github.com/jacobweinstock/proxydhcp v0.3.2-0.20211105051610-d95587f6c3ba
 	github.com/peterbourgon/ff/v3 v3.1.2
 	go.uber.org/zap v1.19.1
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
@@ -18,12 +18,17 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
+	github.com/hashicorp/errwrap v1.0.0 // indirect
+	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/insomniacslk/dhcp v0.0.0-20211026125128-ad197bcd36fd // indirect
+	github.com/kavu/go_reuseport v1.5.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/tinkerbell/tftp-go v0.0.0-20211001160938-0e6da462693b // indirect
 	github.com/tinkerbell/tink v0.0.0-20211008182423-e8019c93a1c5 // indirect
+	github.com/u-root/uio v0.0.0-20210528114334-82958018845c // indirect
 	go.opentelemetry.io/otel v1.0.1 // indirect
 	go.opentelemetry.io/otel/trace v1.0.1 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
