@@ -58,8 +58,8 @@ func (c *fileCfg) exec(ctx context.Context) error {
 			pd := proxydhcp.NewConfig(
 				proxydhcp.WithLogger(c.Log),
 				proxydhcp.WithLogLevel(c.LogLevel),
-				proxydhcp.WithHTTPAddr("http://"+c.IPXEAddr),
-				proxydhcp.WithTFTPAddr("tftp://"+c.IPXEAddr),
+				proxydhcp.WithHTTPAddr(c.IPXEAddr+":80"),
+				proxydhcp.WithTFTPAddr(c.IPXEAddr+":69"),
 				proxydhcp.WithCustomUserClass(c.CustomUserClass),
 				proxydhcp.WithAddr(c.ProxyDHCPAddr),
 				proxydhcp.WithIPXEURL(c.IPXEScriptAddr),

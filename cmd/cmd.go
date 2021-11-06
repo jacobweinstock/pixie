@@ -3,18 +3,16 @@ package cmd
 import (
 	"context"
 	"flag"
-	"fmt"
 	"os"
 	"strings"
 
 	"github.com/go-logr/logr"
-	"github.com/go-logr/zapr"
+	"github.com/go-logr/zerologr"
 	"github.com/go-playground/validator/v10"
 	"github.com/jacobweinstock/proxydhcp/cli"
 	"github.com/peterbourgon/ff/v3"
 	"github.com/peterbourgon/ff/v3/ffcli"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
+	"github.com/rs/zerolog"
 )
 
 const name = "pixie"
@@ -72,20 +70,15 @@ func validate(c *config) error {
 	return validator.New().Struct(c)
 }
 
-// defaultLogger is zap logr implementation.
+// defaultLogger is a zerolog logr implementation.
 func defaultLogger(level string) logr.Logger {
-	config := zap.NewProductionConfig()
-	config.OutputPaths = []string{"stdout"}
-	switch level {
-	case "debug":
-		config.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
-	default:
-		config.Level = zap.NewAtomicLevelAt(zapcore.InfoLevel)
-	}
-	zapLogger, err := config.Build()
-	if err != nil {
-		panic(fmt.Sprintf("who watches the watchmen (%v)?", err))
-	}
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnixMs
+	zerologr.NameFieldName = "logger"
+	zerologr.NameSeparator = "/"
 
-	return zapr.NewLogger(zapLogger)
+	zl := zerolog.New(os.Stdout)
+	zl = zl.With().Caller().Timestamp().Logger()
+	var log logr.Logger = zerologr.New(&zl)
+
+	return log
 }
