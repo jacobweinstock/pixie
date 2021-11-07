@@ -59,7 +59,7 @@ func registerFlags(c *config, name string, errHandler flag.ErrorHandling) *flag.
 	fs.StringVar(&c.IPXEScriptAddr, "ipxe-script-addr", "", "address that serves the ipxe script (http://192.168.2.2)")
 	fs.StringVar(&c.IPXEScript, "ipxe-script-name", "auto.ipxe", "ipxe script name. used with ipxe-script-addr (http://192.168.2.2/<mac-addr>/auto.ipxe)")
 	fs.StringVar(&c.ProxyDHCPAddr, "proxy-dhcp-addr", "", "address to listen on for proxy dhcp")
-	fs.StringVar(&c.CustomUserClass, "custom-user-class", "iPXE", "custom user class")
+	fs.StringVar(&c.CustomUserClass, "custom-user-class", "", "custom user class")
 	fs.BoolVar(&c.DisableIPXE, "disable-ipxe", false, "disable ipxe")
 	fs.BoolVar(&c.DisableProxyDHCP, "disable-proxy-dhcp", false, "disable proxy dhcp")
 

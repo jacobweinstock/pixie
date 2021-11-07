@@ -3,12 +3,14 @@ package cmd
 import (
 	"context"
 	"flag"
+	"net/url"
 
 	"github.com/go-playground/validator/v10"
 	ipxe "github.com/jacobweinstock/ipxe/cli"
-	proxydhcp "github.com/jacobweinstock/proxydhcp/cli"
+	"github.com/jacobweinstock/proxydhcp/proxy"
 	"github.com/peterbourgon/ff/v3/ffcli"
 	"golang.org/x/sync/errgroup"
+	"inet.af/netaddr"
 )
 
 const fileCLI = "file"
@@ -55,20 +57,65 @@ func (c *fileCfg) exec(ctx context.Context) error {
 	if !c.DisableProxyDHCP {
 		enabled = append(enabled, "proxy-dhcp")
 		g.Go(func() error {
-			pd := proxydhcp.NewConfig(
-				proxydhcp.WithLogger(c.Log),
-				proxydhcp.WithLogLevel(c.LogLevel),
-				proxydhcp.WithHTTPAddr(c.IPXEAddr+":80"),
-				proxydhcp.WithTFTPAddr(c.IPXEAddr+":69"),
-				proxydhcp.WithCustomUserClass(c.CustomUserClass),
-				proxydhcp.WithAddr(c.ProxyDHCPAddr),
-				proxydhcp.WithIPXEURL(c.IPXEScriptAddr),
-				proxydhcp.WithIPXEScriptName(c.IPXEScript),
-			)
-			if err := pd.ValidateConfig(); err != nil {
+			ta, err := netaddr.ParseIPPort(c.IPXEAddr + ":69")
+			if err != nil {
 				return err
 			}
-			return pd.Run(ctx, nil)
+			ha, err := netaddr.ParseIPPort(c.IPXEAddr + ":80")
+			if err != nil {
+				return err
+			}
+			ia, err := url.Parse(c.IPXEScriptAddr)
+			if err != nil {
+				return err
+			}
+			opts := []proxy.Option{
+				proxy.WithLogger(c.Log),
+				proxy.WithTFTPAddr(ta),
+				proxy.WithHTTPAddr(ha),
+				proxy.WithIPXEAddr(ia),
+			}
+			if c.IPXEScript == "" {
+				opts = append(opts, proxy.WithIPXEScript(c.IPXEScript))
+			}
+			if c.CustomUserClass != "" {
+				opts = append(opts, proxy.WithUserClass(c.CustomUserClass))
+			}
+			h := proxy.NewHandler(ctx, opts...)
+
+			rs, err := h.ServeRedirection(ctx, c.ProxyDHCPAddr)
+			if err != nil {
+				return err
+			}
+
+			bs, err := h.ServeBoot(ctx, c.ProxyDHCPAddr)
+			if err != nil {
+				return err
+			}
+
+			g, ctx := errgroup.WithContext(ctx)
+			g.Go(func() error {
+				h.Log.Info("starting proxydhcp", "addr1", c.ProxyDHCPAddr, "addr2", "0.0.0.0:67")
+				return rs.Serve()
+			})
+			g.Go(func() error {
+				h.Log.Info("starting proxydhcp", "addr1", c.ProxyDHCPAddr, "addr2", "0.0.0.0:4011")
+				return bs.Serve()
+			})
+
+			errCh := make(chan error)
+			go func() {
+				errCh <- g.Wait()
+			}()
+			select {
+			case err := <-errCh:
+				return err
+			case <-ctx.Done():
+				h.Log.Info("shutting down")
+				rs.Close()
+				bs.Close()
+				return nil
+			}
 		})
 	}
 	if len(enabled) == 0 {
