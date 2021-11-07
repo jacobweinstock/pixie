@@ -7,7 +7,7 @@ require (
 	github.com/go-logr/zerologr v1.2.0
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/jacobweinstock/ipxe v0.0.0-20211104164223-dfa862285dab
-	github.com/jacobweinstock/proxydhcp v0.3.2-0.20211107052140-31c33db551bb
+	github.com/jacobweinstock/proxydhcp v0.3.2-0.20211107070101-2214a15664af
 	github.com/peterbourgon/ff/v3 v3.1.2
 	github.com/rs/zerolog v1.26.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
