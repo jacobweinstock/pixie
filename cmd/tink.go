@@ -37,7 +37,7 @@ func tink(c *tinkCfg) *ffcli.Command {
 	}
 }
 
-func (c *tinkCfg) exec(ctx context.Context) error {
+func (c *tinkCfg) exec(_ context.Context) error {
 	if err := validator.New().Struct(c); err != nil {
 		return err
 	}

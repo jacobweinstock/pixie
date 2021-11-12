@@ -85,7 +85,7 @@ func defaultLogger(level string) logr.Logger {
 	default:
 		l = zerolog.InfoLevel
 	}
-	zl = zl.Level(zerolog.Level(l))
+	zl = zl.Level(l)
 
 	return zerologr.New(&zl)
 }
