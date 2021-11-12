@@ -6,8 +6,9 @@ require (
 	github.com/go-logr/logr v1.2.0
 	github.com/go-logr/zerologr v1.2.0
 	github.com/go-playground/validator/v10 v10.9.0
-	github.com/jacobweinstock/ipxe v0.0.0-20211104164223-dfa862285dab
-	github.com/jacobweinstock/proxydhcp v0.3.2-0.20211107070101-2214a15664af
+	github.com/hashicorp/go-multierror v1.1.1
+	github.com/jacobweinstock/ipxe v0.0.0-20211107194539-e16928922ab7
+	github.com/jacobweinstock/proxydhcp v0.4.4
 	github.com/peterbourgon/ff/v3 v3.1.2
 	github.com/rs/zerolog v1.26.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
@@ -21,7 +22,6 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
-	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/insomniacslk/dhcp v0.0.0-20211026125128-ad197bcd36fd // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect

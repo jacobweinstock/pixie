@@ -78,7 +78,14 @@ func defaultLogger(level string) logr.Logger {
 
 	zl := zerolog.New(os.Stdout)
 	zl = zl.With().Caller().Timestamp().Logger()
-	var log logr.Logger = zerologr.New(&zl)
+	var l zerolog.Level
+	switch level {
+	case "debug":
+		l = zerolog.DebugLevel
+	default:
+		l = zerolog.InfoLevel
+	}
+	zl = zl.Level(zerolog.Level(l))
 
-	return log
+	return zerologr.New(&zl)
 }
