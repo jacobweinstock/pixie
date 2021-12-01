@@ -49,9 +49,6 @@ func Execute(ctx context.Context) error {
 			tink(&tinkCfg{config: c}),
 		},
 		Exec: func(ctx context.Context, args []string) error {
-			if err := validate(c); err != nil {
-				return err
-			}
 			if err := validator.New().Struct(c); err != nil {
 				return err
 			}
@@ -78,10 +75,6 @@ func registerFlags(c *config, name string, errHandler flag.ErrorHandling) *flag.
 	fs.BoolVar(&c.DisableProxyDHCP, "disable-proxy-dhcp", false, "disable proxy dhcp")
 
 	return fs
-}
-
-func validate(c *config) error {
-	return validator.New().Struct(c)
 }
 
 // defaultLogger is a zerolog logr implementation.
