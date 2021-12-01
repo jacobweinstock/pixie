@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	pdFile "github.com/jacobweinstock/proxydhcp/authz/file"
-	"github.com/jacobweinstock/proxydhcp/proxy"
 	"github.com/peterbourgon/ff/v3/ffcli"
 	"github.com/pkg/errors"
 	"github.com/tinkerbell/tink/protos/hardware"
@@ -19,7 +18,6 @@ const fileCLI = "file"
 type fileCfg struct {
 	*config
 	Filename string `validate:"required"`
-	authz    proxy.Allower
 }
 
 func file(c *fileCfg) *ffcli.Command {
