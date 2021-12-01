@@ -59,24 +59,8 @@ func Execute(ctx context.Context) error {
 			c.Log = c.Log.WithName("pixie")
 			c.Log.Info("Starting")
 
-			var enabled []string
-			g, ctx := errgroup.WithContext(ctx)
-			if !c.DisableIPXE {
-				enabled = append(enabled, "ipxe")
-				g.Go(func() error {
-					return c.runIPXE(ctx)
-				})
-			}
-			if !c.DisableProxyDHCP {
-				enabled = append(enabled, "proxy-dhcp")
-				g.Go(func() error {
-					return c.runProxyDHCP(ctx)
-				})
-			}
-			if len(enabled) == 0 {
-				c.Log.Info("No services enabled")
-			}
-			return g.Wait()
+			a := all{config: c}
+			return a.exec(ctx, proxy.AllowAll{})
 		},
 	}
 	return root.ParseAndRun(ctx, os.Args[1:])
@@ -120,7 +104,34 @@ func defaultLogger(level string) logr.Logger {
 	return zerologr.New(&zl)
 }
 
-func (c *config) runProxyDHCP(ctx context.Context) error {
+type all struct {
+	*config
+	*fileCfg
+	*tinkCfg
+}
+
+func (c all) exec(ctx context.Context, a proxy.Allower) error {
+	var enabled []string
+	g, ctx := errgroup.WithContext(ctx)
+	if !c.DisableIPXE {
+		enabled = append(enabled, "ipxe")
+		g.Go(func() error {
+			return c.runIPXE(ctx)
+		})
+	}
+	if !c.DisableProxyDHCP {
+		enabled = append(enabled, "proxy-dhcp")
+		g.Go(func() error {
+			return c.runProxyDHCP(ctx, a)
+		})
+	}
+	if len(enabled) == 0 {
+		c.Log.Info("No services enabled")
+	}
+	return g.Wait()
+}
+
+func (c *all) runProxyDHCP(ctx context.Context, a proxy.Allower) error {
 	ta, err := netaddr.ParseIPPort(c.IPXEAddr + ":69")
 	if err != nil {
 		return err
@@ -133,11 +144,13 @@ func (c *config) runProxyDHCP(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+
 	opts := []proxy.Option{
 		proxy.WithLogger(c.Log),
 		proxy.WithTFTPAddr(ta),
 		proxy.WithHTTPAddr(ha),
 		proxy.WithIPXEAddr(ia),
+		proxy.WithAllower(a),
 	}
 	if c.IPXEScript == "" {
 		opts = append(opts, proxy.WithIPXEScript(c.IPXEScript))
@@ -185,7 +198,7 @@ func (c *config) runProxyDHCP(ctx context.Context) error {
 	}
 }
 
-func (c *config) runIPXE(ctx context.Context) error {
+func (c *all) runIPXE(ctx context.Context) error {
 	hAddr, err := netaddr.ParseIPPort(c.IPXEAddr + ":80")
 	if err != nil {
 		return err

@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"flag"
-	"fmt"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/peterbourgon/ff/v3/ffcli"
@@ -37,18 +36,22 @@ func tink(c *tinkCfg) *ffcli.Command {
 	}
 }
 
-func (c *tinkCfg) exec(_ context.Context) error {
-	if err := validator.New().Struct(c); err != nil {
-		return err
-	}
-	fmt.Printf("tink: %+v\n", c.config)
-	fmt.Printf("tink: %+v\n", c)
-	return nil
-}
-
 func (c *tinkCfg) registerFlags(name string, errHandler flag.ErrorHandling) *flag.FlagSet {
 	fs := registerFlags(c.config, name, errHandler)
 	fs.StringVar(&c.TLS, "tls", "", "tls")
 	fs.StringVar(&c.Tink, "tink", "", "tink")
 	return fs
+}
+
+func (c *tinkCfg) exec(ctx context.Context) error {
+	if err := validator.New().Struct(c); err != nil {
+		return err
+	}
+	c.Log = defaultLogger(c.LogLevel)
+	c.Log = c.Log.WithName("pixie")
+	c.Log.Info("Starting")
+
+	a := all{config: c.config, tinkCfg: c}
+
+	return a.exec(ctx, nil)
 }
