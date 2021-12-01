@@ -1,187 +1,205 @@
 [
-    {
-        "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a94",
-        "metadata": "",
-        "network": {
-          "interfaces": [
-            {
-              "dhcp": {
-                "arch": "x86_64",
-                "hostname": "server001",
-                "ip": {
-                  "address": "192.168.2.52",
-                  "gateway": "192.168.1.1",
-                  "netmask": "255.255.255.248"
-                },
-                "lease_time": 86400,
-                "mac": "08:00:27:29:4e:67",
-                "name_servers": [],
-                "time_servers": [],
-                "uefi": false
-              },
-              "netboot": {
-                "allow_pxe": true,
-                "allow_workflow": true,
-                "ipxe": {
-                  "contents": "#!ipxe",
-                  "url": "http://url/menu.ipxe"
-                },
-                "osie": {
-                  "base_url": "",
-                  "initrd": "",
-                  "kernel": "vmlinuz-x86_64"
-                }
-              }
+  {
+    "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a94",
+    "metadata": "",
+    "network": {
+      "interfaces": [
+        {
+          "dhcp": {
+            "arch": "x86_64",
+            "hostname": "server001",
+            "ip": {
+              "address": "192.168.2.52",
+              "gateway": "192.168.1.1",
+              "netmask": "255.255.255.248"
+            },
+            "lease_time": 86400,
+            "mac": "08:00:27:29:4e:67",
+            "name_servers": [],
+            "time_servers": [],
+            "uefi": false
+          },
+          "netboot": {
+            "allow_pxe": true,
+            "allow_workflow": true,
+            "ipxe": {
+              "contents": "#!ipxe",
+              "url": "http://url/menu.ipxe"
+            },
+            "osie": {
+              "base_url": "",
+              "initrd": "",
+              "kernel": "vmlinuz-x86_64"
             }
-          ]
+          }
         }
-      },
-      {
-        "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a95",
-        "metadata": "",
-        "network": {
-          "interfaces": [
-            {
-              "dhcp": {
-                "arch": "x86_64",
-                "hostname": "server001",
-                "ip": {
-                  "address": "192.168.0.15",
-                  "gateway": "192.168.1.1",
-                  "netmask": "255.255.255.248"
-                },
-                "lease_time": 86400,
-                "mac": "08:00:27:9e:ec:94",
-                "name_servers": [],
-                "time_servers": [],
-                "uefi": false
-              },
-              "netboot": {
-                "allow_pxe": true,
-                "allow_workflow": true,
-                "ipxe": {
-                  "contents": "#!ipxe",
-                  "url": "http://url/menu.ipxe"
-                },
-                "osie": {
-                  "base_url": "",
-                  "initrd": "",
-                  "kernel": "vmlinuz-x86_64"
-                }
-              }
+      ]
+    }
+  },
+  {
+    "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a95",
+    "metadata": "",
+    "network": {
+      "interfaces": [
+        {
+          "dhcp": {
+            "arch": "x86_64",
+            "hostname": "server001",
+            "ip": {
+              "address": "192.168.0.15",
+              "gateway": "192.168.1.1",
+              "netmask": "255.255.255.248"
+            },
+            "lease_time": 86400,
+            "mac": "08:00:27:9e:ec:94",
+            "name_servers": [],
+            "time_servers": [],
+            "uefi": false
+          },
+          "netboot": {
+            "allow_pxe": true,
+            "allow_workflow": true,
+            "ipxe": {
+              "contents": "#!ipxe",
+              "url": "http://url/menu.ipxe"
+            },
+            "osie": {
+              "base_url": "",
+              "initrd": "",
+              "kernel": "vmlinuz-x86_64"
             }
-          ]
+          }
         }
-      },
-      {
-        "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a96",
-        "metadata": "",
-        "network": {
-          "interfaces": [
-            {
-              "dhcp": {
-                "arch": "x86_64",
-                "hostname": "server001",
-                "ip": {
-                  "address": "192.168.0.15",
-                  "gateway": "192.168.1.1",
-                  "netmask": "255.255.255.248"
-                },
-                "lease_time": 86400,
-                "mac": "08:00:27:b1:da:42",
-                "name_servers": [],
-                "time_servers": [],
-                "uefi": false
-              },
-              "netboot": {
-                "allow_pxe": true,
-                "allow_workflow": true,
-                "ipxe": {
-                  "contents": "#!ipxe",
-                  "url": "http://url/menu.ipxe"
-                },
-                "osie": {
-                  "base_url": "",
-                  "initrd": "",
-                  "kernel": "vmlinuz-x86_64"
-                }
-              }
+      ]
+    }
+  },
+  {
+    "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a96",
+    "metadata": "",
+    "network": {
+      "interfaces": [
+        {
+          "dhcp": {
+            "arch": "x86_64",
+            "hostname": "server001",
+            "ip": {
+              "address": "192.168.0.15",
+              "gateway": "192.168.1.1",
+              "netmask": "255.255.255.248"
+            },
+            "lease_time": 86400,
+            "mac": "08:00:27:b1:da:42",
+            "name_servers": [],
+            "time_servers": [],
+            "uefi": false
+          },
+          "netboot": {
+            "allow_pxe": true,
+            "allow_workflow": true,
+            "ipxe": {
+              "contents": "#!ipxe",
+              "url": "http://url/menu.ipxe"
+            },
+            "osie": {
+              "base_url": "",
+              "initrd": "",
+              "kernel": "vmlinuz-x86_64"
             }
-          ]
+          }
         }
-      },
-      {
-        "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a97",
-        "metadata": "",
-        "network": {
-          "interfaces": [
-            {
-              "dhcp": {
-                "arch": "x86_64",
-                "hostname": "server001",
-                "ip": {
-                  "address": "192.168.0.15",
-                  "gateway": "192.168.1.1",
-                  "netmask": "255.255.255.248"
-                },
-                "lease_time": 86400,
-                "mac": "d2:9a:c5:cb:46:ea",
-                "name_servers": [],
-                "time_servers": [],
-                "uefi": false
-              },
-              "netboot": {
-                "allow_pxe": true,
-                "allow_workflow": true,
-                "ipxe": {
-                  "contents": "#!ipxe",
-                  "url": "http://url/menu.ipxe"
-                },
-                "osie": {
-                  "base_url": "",
-                  "initrd": "",
-                  "kernel": "vmlinuz-x86_64"
-                }
-              }
+      ]
+    }
+  },
+  {
+    "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a97",
+    "metadata": "",
+    "network": {
+      "interfaces": [
+        {
+          "dhcp": {
+            "arch": "x86_64",
+            "hostname": "server001",
+            "ip": {
+              "address": "192.168.0.15",
+              "gateway": "192.168.1.1",
+              "netmask": "255.255.255.248"
+            },
+            "lease_time": 86400,
+            "mac": "d2:9a:c5:cb:46:ea",
+            "name_servers": [],
+            "time_servers": [],
+            "uefi": false
+          },
+          "netboot": {
+            "allow_pxe": true,
+            "allow_workflow": true,
+            "ipxe": {
+              "contents": "#!ipxe",
+              "url": "http://url/menu.ipxe"
+            },
+            "osie": {
+              "base_url": "",
+              "initrd": "",
+              "kernel": "vmlinuz-x86_64"
             }
-          ]
+          }
         }
-      },
-      {
-        "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a97",
-        "metadata": "",
-        "network": {
-          "interfaces": [
-            {
-              "dhcp": {
-                "arch": "x86_64",
-                "hostname": "server001",
-                "ip": {
-                  "address": "192.168.0.15",
-                  "gateway": "192.168.1.1",
-                  "netmask": "255.255.255.248"
-                },
-                "lease_time": 86400,
-                "mac": "a4:ae:11:1c:2f:d8",
-                "name_servers": [],
-                "time_servers": [],
-                "uefi": false
-              },
-              "netboot": {
-                "allow_pxe": true,
-                "allow_workflow": true,
-                "ipxe": {
-                  "contents": "#!ipxe",
-                  "url": "http://url/menu.ipxe"
-                },
-                "osie": {
-                  "base_url": "",
-                  "initrd": "",
-                  "kernel": "vmlinuz-x86_64"
-                }
-              }
+      ]
+    }
+  },
+  {
+    "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a97",
+    "metadata": "",
+    "network": {
+      "interfaces": [
+        {
+          "dhcp": {
+            "arch": "x86_64",
+            "hostname": "server001",
+            "ip": {
+              "address": "192.168.0.15",
+              "gateway": "192.168.1.1",
+              "netmask": "255.255.255.248"
+            },
+            "lease_time": 86400,
+            "mac": "a4:ae:11:1c:2f:d8",
+            "name_servers": [],
+            "time_servers": [],
+            "uefi": false
+          },
+          "netboot": {
+            "allow_pxe": true,
+            "allow_workflow": true,
+            "ipxe": {
+              "contents": "#!ipxe",
+              "url": "http://url/menu.ipxe"
+            },
+            "osie": {
+              "base_url": "",
+              "initrd": "",
+              "kernel": "vmlinuz-x86_64"
             }
-          ]
+          }
         }
-      }
+      ]
+    }
+  },
+  {
+    "id": "0eba0bf8-3772-4b4a-ab9f-6ebe93b90a96",
+    "network": {
+      "interfaces": [
+        {
+          "dhcp": {
+            "ip": {
+              "address": "192.168.2.54"
+            },
+            "mac": "52:54:00:be:a9:73"
+          },
+          "netboot": {
+            "allow_pxe": true
+          }
+        }
+      ]
+    }
+  }
 ]

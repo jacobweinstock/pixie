@@ -3,16 +3,22 @@ package cmd
 import (
 	"context"
 	"flag"
+	"net/url"
 	"os"
 	"strings"
 
 	"github.com/go-logr/logr"
 	"github.com/go-logr/zerologr"
 	"github.com/go-playground/validator/v10"
+	"github.com/hashicorp/go-multierror"
+	"github.com/jacobweinstock/ipxe"
 	"github.com/jacobweinstock/proxydhcp/cli"
+	"github.com/jacobweinstock/proxydhcp/proxy"
 	"github.com/peterbourgon/ff/v3"
 	"github.com/peterbourgon/ff/v3/ffcli"
 	"github.com/rs/zerolog"
+	"golang.org/x/sync/errgroup"
+	"inet.af/netaddr"
 )
 
 const name = "pixie"
@@ -46,7 +52,31 @@ func Execute(ctx context.Context) error {
 			if err := validate(c); err != nil {
 				return err
 			}
-			return flag.ErrHelp
+			if err := validator.New().Struct(c); err != nil {
+				return err
+			}
+			c.Log = defaultLogger(c.LogLevel)
+			c.Log = c.Log.WithName("pixie")
+			c.Log.Info("Starting")
+
+			var enabled []string
+			g, ctx := errgroup.WithContext(ctx)
+			if !c.DisableIPXE {
+				enabled = append(enabled, "ipxe")
+				g.Go(func() error {
+					return c.runIPXE(ctx)
+				})
+			}
+			if !c.DisableProxyDHCP {
+				enabled = append(enabled, "proxy-dhcp")
+				g.Go(func() error {
+					return c.runProxyDHCP(ctx)
+				})
+			}
+			if len(enabled) == 0 {
+				c.Log.Info("No services enabled")
+			}
+			return g.Wait()
 		},
 	}
 	return root.ParseAndRun(ctx, os.Args[1:])
@@ -88,4 +118,92 @@ func defaultLogger(level string) logr.Logger {
 	zl = zl.Level(l)
 
 	return zerologr.New(&zl)
+}
+
+func (c *config) runProxyDHCP(ctx context.Context) error {
+	ta, err := netaddr.ParseIPPort(c.IPXEAddr + ":69")
+	if err != nil {
+		return err
+	}
+	ha, err := netaddr.ParseIPPort(c.IPXEAddr + ":80")
+	if err != nil {
+		return err
+	}
+	ia, err := url.Parse(c.IPXEScriptAddr)
+	if err != nil {
+		return err
+	}
+	opts := []proxy.Option{
+		proxy.WithLogger(c.Log),
+		proxy.WithTFTPAddr(ta),
+		proxy.WithHTTPAddr(ha),
+		proxy.WithIPXEAddr(ia),
+	}
+	if c.IPXEScript == "" {
+		opts = append(opts, proxy.WithIPXEScript(c.IPXEScript))
+	}
+	if c.CustomUserClass != "" {
+		opts = append(opts, proxy.WithUserClass(c.CustomUserClass))
+	}
+	h := proxy.NewHandler(ctx, opts...)
+
+	u, err := netaddr.ParseIPPort(c.ProxyDHCPAddr + ":67")
+	if err != nil {
+		return err
+	}
+	rs, err := h.Server(u)
+	if err != nil {
+		return err
+	}
+
+	h2 := proxy.NewHandler(ctx, opts...)
+	bs, err := h2.Server(u.WithPort(4011))
+	if err != nil {
+		return err
+	}
+
+	g, ctx := errgroup.WithContext(ctx)
+	g.Go(func() error {
+		h.Log.Info("starting proxydhcp", "addr1", c.ProxyDHCPAddr, "addr2", "0.0.0.0:67")
+		return rs.Serve()
+	})
+	g.Go(func() error {
+		h.Log.Info("starting proxydhcp", "addr1", c.ProxyDHCPAddr, "addr2", "0.0.0.0:4011")
+		return bs.Serve()
+	})
+
+	errCh := make(chan error)
+	go func() {
+		errCh <- g.Wait()
+	}()
+	select {
+	case err := <-errCh:
+		return err
+	case <-ctx.Done():
+		h.Log.Info("shutting down")
+		return multierror.Append(nil, rs.Close(), bs.Close()).ErrorOrNil()
+	}
+}
+
+func (c *config) runIPXE(ctx context.Context) error {
+	hAddr, err := netaddr.ParseIPPort(c.IPXEAddr + ":80")
+	if err != nil {
+		return err
+	}
+	tAddr, err := netaddr.ParseIPPort(c.IPXEAddr + ":69")
+	if err != nil {
+		return err
+	}
+	cf := ipxe.Config{
+		TFTP: ipxe.TFTP{
+			Addr: tAddr,
+		},
+		HTTP: ipxe.HTTP{
+			Addr: hAddr,
+		},
+		MACPrefix: true,
+		Log:       c.Log,
+	}
+
+	return cf.Serve(ctx)
 }
